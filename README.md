@@ -11,20 +11,21 @@ Demonstration of Python and brute-force backtracking recursion
 - Optionally display progress on Pygame screen  
 
 ### Features:  
-Recursive backtracking algorithm  
-1D array instead of the traditional 2D array  
-Pygame visualization that can be toggled  
-Efficient cell checking for completeness  
+Most examples of sudoku recursion use 2D arrays. I thought I would do a challenge of 
+only using a 1D array. I didn't want to "cheat" by using a level of abstraction of putting in (x,y) and converting
+to the position in the array/list but but to using the array/list directly. I did this a test so see if I could work with that limitation.
+Most of the functionality is still trivial except for figuring if the inner box is valid.
+See the function isvalidbox() to see the tricky math.
 
 Constant DISPLAYPROGRESS can be set to True or False to toggle whether displayed in Pygame
 
 ### Future upgrades:  
-This is just a demonstration of solving a sample sudoku so one puzzle is hardcoded in with options to uncomment others.  
-Future improvements could include the possibility to load a puzzle.   
+- Loading a puzzle instead of hardcoding one  
+- Instead of solving left-to-right top-to-bottom, solve in an order of a LIFO stack. This would appear random.
+   
 
 ### Requirements:  
 Python 3.7+  
 Pygame (if DISPLAYPROGRESS is True)  
 
 ### Reference: https://en.wikipedia.org/wiki/Sudoku_solving_algorithms
-
