@@ -1,12 +1,5 @@
-#Another example of Sudoku solving using brute force backtracking
+"""Another example of Sudoku solving using brute force backtracking"""
 
-#Most examples of sudoku recursion use 2D arrays. I thought it would be easier/more efficient
-#to use a 1D array. As it turns out, there are a lot of things that are
-#easier in a 2D array. The trickiest part is calculating the cells
-#that are in an inner box. This involves a bunch of tricky math.
-#See the area labeled "test if in box".
-
-#Optional animation in Pygame to view as it's being solved
 #Enable if you want a graphic display of the calculation
 DISPLAYPROGRESS=True
 
@@ -43,27 +36,46 @@ board=[0,7,0,  6,2,9,  3,0,0,
 
 #Check if guess will word in the square
 def isvalid(board,location,guess):
-    #test if in row
+    if not isvalidrow(board,location,guess):
+        return(False)
+    if not isvalidcol(board,location,guess):
+        return(False)
+    if not isvalidbox(board,location,guess):
+        return(False)
+    return(True)
+
+#Helper validation functions
+def isvalidrow(board,location,guess)->bool:
+    #test if already in row
     rowstart=(location//9)*9
     for testlocation in range(rowstart,rowstart+9):
-        if board[testlocation]==guess:
+        if board[testlocation]==guess:#finding the number is invalid
             return False
-        
+    return(True)
+
+
+def isvalidcol(board,location,guess)->bool:
     #test if in column
     colstart=location%9
     for testlocation in range(colstart,81,9):
-        if board[testlocation]==guess:
+        if board[testlocation]==guess:#finding the number is invalid
             return False
-        
+    return(True)
+
+def isvalidbox(board,location,guess)->bool:
     #test if in box
-    #the math is messy but the best I could calculate    
-    boxstart=((location//27)*27)+((colstart//3)*3)
+    #the math is a little messy
+    colstart=location%9
+    threerows=27
+    colsinbox=3
+    boxstart=((location//threerows)*threerows) \
+             +((colstart//colsinbox)*colsinbox)
     for i in range(9):
         testlocation=boxstart+((i//3)*9)+(i%3)
-        if board[testlocation]==guess:
+        if board[testlocation]==guess:#finding the number is invalid
             return False
-        
     return(True)
+
 
 #display functions
 def printgrid(board)->None:
@@ -96,12 +108,11 @@ def pygamedraw(board:list)->None:
         screen.blit(out,(x,y))
     pygame.display.flip()
     sleep(0.01) #change depending on your machine speed
-    
-    
+
 #Main function
 def ssolve(board):
-    #find first NOTFILLED location
     try:
+        #find first NOTFILLED location
         location=board.index(NOTFILLED)
     except:
         #all solved
@@ -117,7 +128,6 @@ def ssolve(board):
                 return(True)
 
         #if no guesses work, fail and recurse to previous
-        #Also no guesses right, keep it 0, fail and recurse to previous
         board[location]=NOTFILLED
         
     #We have no solution
@@ -138,7 +148,6 @@ if DISPLAYPROGRESS:
     screen=pygame.display.set_mode((290,400))
     font=pygame.font.SysFont("DejaVuSansMono-Bold.ttf",56)
     pygame.display.set_caption('Sudoku Progress')
-
 if (ssolve(board)):
     print('Solved!')
     printgrid(board)
